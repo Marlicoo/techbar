@@ -10,7 +10,7 @@ parameters:
 
 framework:
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -67,3 +67,41 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+fos_user:
+    db_driver: orm
+    firewall_name: main
+    user_class: AppBundle\Entity\User\User
+    service:
+        user_manager: pugx_user_manager
+    from_email:
+        address:        noreply@techbar.com
+        sender_name:    TechBar
+
+pugx_multi_user:
+  users:
+    client:
+        entity:
+          class: AppBundle\Entity\User\Client
+#          factory:
+        registration:
+          form:
+            type: AppBundle\Form\Registration\RegistrationClientFormType
+            name: fos_user_registration_form
+            validation_groups:  [Registration, Default]
+          template: AppBundle:Registration:client.form.html.twig
+        profile:
+          form:
+            type: AppBundle\Form\Registration\ProfileClientFormType
+            name: fos_user_profile_form
+            validation_groups:  [Profile, Default]
+    employee:
+        entity:
+          class: AppBundle\Entity\User\Employee
+        registration:
+          form:
+            type: AppBundle\Form\Registration\RegistrationEmployeeFormType
+          template: AppBundle:Registration:employee.form.html.twig
+        profile:
+          form:
+            type: AppBundle\Form\Registration\ProfileClientFormType
